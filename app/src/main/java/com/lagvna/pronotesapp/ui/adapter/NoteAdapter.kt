@@ -17,6 +17,7 @@ class NoteAdapter(
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNoteText: TextView = itemView.findViewById(R.id.tvNoteText)
+        val tvNoteDate: TextView = itemView.findViewById(R.id.tvNoteDate)
         val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit)
         val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
     }
@@ -29,7 +30,9 @@ class NoteAdapter(
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = notes[position]
+
         holder.tvNoteText.text = note.text
+        holder.tvNoteDate.text = formatDate(note.createdAt)
 
         holder.btnEdit.setOnClickListener {
             onEditClick(note)
@@ -46,4 +49,13 @@ class NoteAdapter(
         notes = newNotes
         notifyDataSetChanged()
     }
+
+    private fun formatDate(timestamp: Long): String {
+        val sdf = java.text.SimpleDateFormat(
+            "dd/MM/yyyy HH:mm",
+            java.util.Locale.getDefault()
+        )
+        return sdf.format(java.util.Date(timestamp))
+    }
+
 }
